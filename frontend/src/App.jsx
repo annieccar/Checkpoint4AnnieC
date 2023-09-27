@@ -1,10 +1,11 @@
-import Home from "./pages/Home";
+import NavBar from "./components/Navbar";
+import Router from "./routes/Router";
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-      <p className="text-red text-3xl font-primary">coucou</p>
+    <div>
+      <NavBar />
+      <Router />
     </div>
   );
 }
