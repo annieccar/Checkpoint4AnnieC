@@ -1,10 +1,14 @@
-import Home from "./pages/Home";
+import NavBar from "./components/Navbar";
+import { CurrentUserContextProvider } from "./contexts/currentUserContext";
+import Router from "./routes/Router";
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-      <p className="text-red text-3xl font-primary">coucou</p>
+    <div className="bg-lightgray pb-12">
+      <CurrentUserContextProvider>
+        <NavBar />
+        <Router />
+      </CurrentUserContextProvider>
     </div>
   );
 }
