@@ -1,38 +1,36 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useCurrentUserContext } from "../contexts/currentUserContext";
+
+const { VITE_BACKEND_URL } = import.meta.env;
 
 export default function Login() {
+  const { setUser } = useCurrentUserContext();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const formData = new FormData();
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-
-    // expressAPI
-    //   .put(`/api/users/${user.id}`, formData, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   })
-    //   .then((res) => {
-    //     res.data.usertype_id = parseInt(res.data.usertype_id, 10);
-    //     setUser(res.data);
-    //     localStorage.setItem("user", JSON.stringify(res.data));
-    //     if (res.status === 201) {
-    //       setUpdateSuccess(true);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+  const logIn = (data) => {
+    axios
+      .post(`${VITE_BACKEND_URL}/auth/login`, data)
+      .then((res) => {
+        setUser(res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        navigate("/myrecipes");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
     <form
       className="w-80 flex flex-col justify-start"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(logIn)}
     >
       <div className="flex flex-col">
         <label

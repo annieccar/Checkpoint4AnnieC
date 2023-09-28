@@ -5,6 +5,13 @@ class RecipeManager extends AbstractManager {
     super({ table: "recipe" });
   }
 
+  findAllByUser(id) {
+    return this.database.query(
+      `select recipe.id, recipe.title, category.name from recipe join receipe_has_category on receipe_has_category.recipe_id = recipe.id join category on category.id = receipe_has_category.category_id where recipe.user_id =?;`,
+      [id]
+    );
+  }
+
   //   insert(item) {
   //     return this.database.query(`insert into ${this.table} (title) values (?)`, [
   //       item.title,
