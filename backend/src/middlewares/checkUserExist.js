@@ -1,13 +1,19 @@
 const models = require("../models");
 
 const checkUserExists = async (req, res, next) => {
-  const [user] = await models.user.findByEmail(req.body.email);
-
-  if (user.length === 0) {
-    return res.status(400).json({ message: "user does not exist" });
+  try {
+    const [users] = await models.user.findByEmail(req.body.email);
+    if (users.length) {
+      const [user] = users;
+      req.user = user;
+      next();
+    } else {
+      res.sendStatus(401);
+    }
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
   }
-
-  return next();
 };
 
 module.exports = checkUserExists;

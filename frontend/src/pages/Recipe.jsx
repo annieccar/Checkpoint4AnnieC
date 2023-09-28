@@ -7,8 +7,9 @@ const { VITE_BACKEND_URL } = import.meta.env;
 
 export default function Recipe() {
   const recipeId = useParams();
-  const [recipeDetails, setRecipeDetails] = useState([]);
+  const [recipeDetails, setRecipeDetails] = useState({});
   const [recipeCategories, setRecipeCategories] = useState([]);
+  const [fileType, setFileType] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,8 +23,20 @@ export default function Recipe() {
         const categoriesResponse = await axios.get(
           `${VITE_BACKEND_URL}/categories/recipe/${recipeId.id}`
         );
+
         setRecipeDetails(recipeResponse.data[0]);
         setRecipeCategories(categoriesResponse.data);
+        const fileExt = recipeResponse.data[0].file_name.split(".")[1];
+        if (
+          fileExt === "jpeg" ||
+          fileExt === "jpg" ||
+          fileExt === "png" ||
+          fileExt === "webp"
+        ) {
+          setFileType("image");
+        } else if (fileExt === "pdf") {
+          setFileType("pdf");
+        }
       } catch (err) {
         console.error(err);
       }
@@ -43,60 +56,76 @@ export default function Recipe() {
   };
 
   return (
-    <div className="mt-5">
-      <button
-        onClick={() => navigate("/myrecipes")}
-        type="button"
-        className="flex items-center px-2"
-      >
-        <BsFillArrowLeftSquareFill size={20} />
-        <div className="font-primary text-lg font-bold ml-1">
-          Back to recipe list
-        </div>
-      </button>
-      <div className="flex flex-col items-center mt-5">
-        <div className="font-primary text-red text-2xl font-bold">
-          {recipeDetails.title}
-        </div>
-        <div className="flex my-3 items-center">
-          <div className="font-primary text-dark text-lg font-bold">Notes:</div>
-          <div className="font-script text-2xl ml-2">{recipeDetails.notes}</div>
-        </div>
-        <div className="flex flex-col">
-          {/* <iframe
-            src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
-          />
-          <img src="http://localhost:8000/public/files/annie.png" /> */}
-          <div className="font-primary text-dark my-3">
-            Associated categories:{" "}
+    recipeDetails && (
+      <div className="mt-5">
+        <button
+          onClick={() => navigate("/myrecipes")}
+          type="button"
+          className="flex items-center px-2"
+        >
+          <BsFillArrowLeftSquareFill size={20} />
+          <div className="font-primary text-lg font-bold ml-1">
+            Back to recipe list
           </div>
-          <div className="flex border-b pb-5 border-gray">
-            {recipeCategories.map((category) => (
-              <div
-                key={category.name}
-                className="font-primary w-fit px-3 font-bold h-8 text-sm bg-red text-white mr-2 flex justify-center items-center"
+        </button>
+        <div className="flex flex-col items-center mt-5">
+          <div className="font-primary text-red text-2xl font-bold">
+            {recipeDetails.title}
+          </div>
+          <div className="flex my-3 items-center">
+            <div className="font-primary text-dark text-lg font-bold">
+              Notes:
+            </div>
+            <div className="font-script text-2xl ml-2">
+              {recipeDetails.notes}
+            </div>
+          </div>
+          <div className="flex flex-col items-center w-10/12">
+            {fileType === "image" ? (
+              <img
+                className="w-full"
+                src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
+                alt={recipeDetails.title}
+              />
+            ) : (
+              <iframe
+                title={recipeDetails.title}
+                className="w-full h-[400px]"
+                src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
+              />
+            )}
+
+            <div className="font-primary text-dark my-3">
+              Associated categories:
+            </div>
+            <div className="flex border-b pb-5 border-gray">
+              {recipeCategories.map((category) => (
+                <div
+                  key={category.name}
+                  className="font-primary w-fit px-3 font-bold h-8 text-sm bg-red text-white mr-2 flex justify-center items-center"
+                >
+                  {category.name}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-around items-center mt-10">
+              <button
+                type="button"
+                className="font-primary w-fit px-3 font-bold h-8 text-sm bg-green hover:opacity-70 text-white mr-2 flex justify-center items-center"
               >
-                {category.name}
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-around items-center mt-10">
-            <button
-              type="button"
-              className="font-primary w-fit px-3 font-bold h-8 text-sm bg-green hover:opacity-70 text-white mr-2 flex justify-center items-center"
-            >
-              Edit Recipe
-            </button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="font-primary w-fit px-3 font-bold h-8 text-sm bg-green hover:opacity-70 text-white mr-2 flex justify-center items-center"
-            >
-              Delete Recipe
-            </button>
+                Edit Recipe
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="font-primary w-fit px-3 font-bold h-8 text-sm bg-green hover:opacity-70 text-white mr-2 flex justify-center items-center"
+              >
+                Delete Recipe
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )
   );
 }

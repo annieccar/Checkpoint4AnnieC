@@ -31,7 +31,7 @@ app.use(router);
 
 // serve the `backend/public` folder for public resources
 
-app.use(express.static(path.join(__dirname, "../public")));
+app.use("/public", express.static(path.join(__dirname, "../public")));
 
 // serve REACT APP
 

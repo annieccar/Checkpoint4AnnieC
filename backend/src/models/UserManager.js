@@ -11,11 +11,12 @@ class UserManager extends AbstractManager {
     ]);
   }
 
-  //   insert(item) {
-  //     return this.database.query(`insert into ${this.table} (title) values (?)`, [
-  //       item.title,
-  //     ]);
-  //   }
+  insert({ username, email, hashedPassword }) {
+    return this.database.query(
+      `insert into ${this.table} (user_name, email, password) values (? , ? , ?)`,
+      [username, email, hashedPassword]
+    );
+  }
 
   //   update(item) {
   //     return this.database.query(

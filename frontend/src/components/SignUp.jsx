@@ -1,6 +1,12 @@
 import { useForm } from "react-hook-form";
+import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const { VITE_BACKEND_URL } = import.meta.env;
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -9,26 +15,23 @@ export default function SignUp() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const formData = new FormData();
-    formData.append("username", data.username);
-    formData.append("email", data.email);
-    formData.append("password", data.password);
+    const newData = data;
+    delete newData.confirmpassword;
 
-    // expressAPI
-    //   .put(`/api/users/${user.id}`, formData, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   })
-    //   .then((res) => {
-    //     res.data.usertype_id = parseInt(res.data.usertype_id, 10);
-    //     setUser(res.data);
-    //     localStorage.setItem("user", JSON.stringify(res.data));
-    //     if (res.status === 201) {
-    //       setUpdateSuccess(true);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    const signUp = async () => {
+      try {
+        const signUpResponse = await axios.post(
+          `${VITE_BACKEND_URL}/auth/signup`,
+          newData
+        );
+        if (signUpResponse.status === 201) {
+          navigate("/signup");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    signUp();
   };
 
   return (
