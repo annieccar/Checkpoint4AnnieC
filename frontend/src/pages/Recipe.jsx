@@ -57,7 +57,7 @@ export default function Recipe() {
 
   return (
     recipeDetails && (
-      <div className="mt-5">
+      <div className="mt-5 lg:mx-10">
         <button
           onClick={() => navigate("/myrecipes")}
           type="button"
@@ -68,47 +68,54 @@ export default function Recipe() {
             Back to recipe list
           </div>
         </button>
-        <div className="flex flex-col items-center mt-5">
-          <div className="font-primary text-red text-2xl font-bold">
-            {recipeDetails.title}
-          </div>
-          <div className="flex my-3 items-center">
-            <div className="font-primary text-dark text-lg font-bold">
-              Notes:
-            </div>
-            <div className="font-script text-2xl ml-2">
-              {recipeDetails.notes}
-            </div>
-          </div>
-          <div className="flex flex-col items-center w-10/12">
-            {fileType === "image" ? (
-              <img
-                className="w-full"
-                src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
-                alt={recipeDetails.title}
-              />
-            ) : (
-              <iframe
-                title={recipeDetails.title}
-                className="w-full h-[400px]"
-                src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
-              />
-            )}
 
-            <div className="font-primary text-dark my-3">
-              Associated categories:
+        <div className="flex flex-col items-center mt-5 lg:flex-row lg:w-[90vw] lg:h-fit lg:items-start">
+          <div className="flex flex-col items-center lg:w-3/4">
+            <div className="font-primary text-red text-2xl font-bold">
+              {recipeDetails.title}
             </div>
-            <div className="flex border-b pb-5 border-gray">
-              {recipeCategories.map((category) => (
-                <div
-                  key={category.name}
-                  className="font-primary w-fit px-3 font-bold h-8 text-sm bg-red text-white mr-2 flex justify-center items-center"
-                >
-                  {category.name}
-                </div>
-              ))}
+            <div className="flex my-3 items-center">
+              <div className="font-primary text-dark text-lg font-bold">
+                Notes:
+              </div>
+              <div className="font-script text-2xl ml-2">
+                {recipeDetails.notes}
+              </div>
             </div>
-            <div className="flex justify-around items-center mt-10">
+            <div className="flex flex-col items-center w-10/12">
+              {fileType === "image" ? (
+                <img
+                  className="w-full"
+                  src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
+                  alt={recipeDetails.title}
+                />
+              ) : (
+                <iframe
+                  title={recipeDetails.title}
+                  className="w-full h-[400px] lg:h-[600px]"
+                  src={`${VITE_BACKEND_URL}/public/files/${recipeDetails.file_name}`}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col items-center lg:w-1/4 lg:justify-start lg:h-full">
+            <div className="flex flex-col items-center w-3/4 border-b lg:border-none  border-gray ">
+              <div className="font-primary text-dark my-3">
+                Associated categories:
+              </div>
+              <div className="flex pb-5">
+                {recipeCategories.map((category) => (
+                  <div
+                    key={category.name}
+                    className="font-primary w-fit px-3 font-bold h-8 text-sm bg-red text-white mr-2 flex justify-center items-center"
+                  >
+                    {category.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-around items-center mt-10 lg:w-3/4">
               <button
                 type="button"
                 className="font-primary w-fit px-3 font-bold h-8 text-sm bg-green hover:opacity-70 text-white mr-2 flex justify-center items-center"

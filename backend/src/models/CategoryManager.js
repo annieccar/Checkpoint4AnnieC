@@ -19,18 +19,12 @@ class CategoryManager extends AbstractManager {
     );
   }
 
-  //   insert(item) {
-  //     return this.database.query(`insert into ${this.table} (title) values (?)`, [
-  //       item.title,
-  //     ]);
-  //   }
-
-  //   update(item) {
-  //     return this.database.query(
-  //       `update ${this.table} set title = ? where id = ?`,
-  //       [item.title, item.id]
-  //     );
-  //   }
+  insert({ name, userId }) {
+    return this.database.query(
+      `insert into ${this.table} (name, user_id) values (? , ?)`,
+      [name, userId]
+    );
+  }
 }
 
 module.exports = CategoryManager;

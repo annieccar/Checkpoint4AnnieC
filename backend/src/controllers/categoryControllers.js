@@ -44,8 +44,22 @@ const readByRecipe = async (req, res) => {
   }
 };
 
+const add = async (req, res) => {
+  try {
+    const category = req.body;
+    const [result] = await models.category.insert(category);
+    if (result.affectedRows) {
+      res.status(201).json({ id: result.insertId, ...req.body });
+    }
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
 module.exports = {
   browse,
   readByUser,
   readByRecipe,
+  add,
 };

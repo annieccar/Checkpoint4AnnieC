@@ -4,12 +4,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { useCurrentUserContext } from "../contexts/currentUserContext";
+import CategoryModal from "../components/CategoryModal";
 
 export default function CreateRecipe() {
   const { user } = useCurrentUserContext();
   const userId = parseInt(user.Id, 10);
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [isModal, setIsModal] = useState(false);
   const navigate = useNavigate();
   const { VITE_BACKEND_URL } = import.meta.env;
   const {
@@ -30,7 +32,7 @@ export default function CreateRecipe() {
       }
     };
     fetchData();
-  }, []);
+  }, [isModal]);
 
   const handleCheckboxChange = (e) => {
     const categoryId = e.target.value;
@@ -79,7 +81,7 @@ export default function CreateRecipe() {
   };
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 lg:px-10">
       <button
         onClick={() => navigate("/myrecipes")}
         type="button"
@@ -107,7 +109,7 @@ export default function CreateRecipe() {
             </label>
             {/* eslint-disable react/jsx-props-no-spreading */}
             <input
-              className="h-9 focus:outline-none mb-2 px-2 rounded-lg border-2 border-solid border-red text-gray font-primary "
+              className="h-10 focus:outline-none mb-2 px-2 rounded-lg border-2 border-solid border-red text-gray font-primary "
               type="text"
               {...register("title", {
                 required: true,
@@ -132,7 +134,7 @@ export default function CreateRecipe() {
             </label>
             {/* eslint-disable react/jsx-props-no-spreading */}
             <input
-              className="h-9 focus:outline-none mb-2 px-2 rounded-lg border-2 border-solid border-red text-gray font-primary "
+              className="file:mt-1 h-10 focus:outline-none mb-2 px-2 rounded-lg border-2 border-solid border-red text-gray font-primary flex items-center "
               type="file"
               {...register("recipeFile", {
                 required: true,
@@ -163,28 +165,37 @@ export default function CreateRecipe() {
               // defaultValue={user.username}
             />
           </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="categories"
-              className="text-dark font-primary font-bold text-l mb-2 "
-            >
-              Select categories:
-            </label>
-            {/* eslint-disable react/jsx-props-no-spreading */}
-            <div>
-              {categories.map((category) => (
-                <div key={category.Id} className="flex">
-                  <input
-                    type="checkbox"
-                    id={category.id}
-                    name={category.name}
-                    value={category.Id}
-                    onChange={handleCheckboxChange}
-                  />
-                  <div className="ml-2">{category.name}</div>
-                </div>
-              ))}
+          <div className="flex justify-between items-start px-2 mt-5">
+            <div className="flex flex-col">
+              <label
+                htmlFor="categories"
+                className="text-dark font-primary font-bold text-l mb-2 "
+              >
+                Select categories:
+              </label>
+              {/* eslint-disable react/jsx-props-no-spreading */}
+              <div>
+                {categories.map((category) => (
+                  <div key={category.Id} className="flex">
+                    <input
+                      type="checkbox"
+                      id={category.id}
+                      name={category.name}
+                      value={category.Id}
+                      onChange={handleCheckboxChange}
+                    />
+                    <div className="ml-2">{category.name}</div>
+                  </div>
+                ))}
+              </div>
             </div>
+            <button
+              onClick={() => setIsModal(true)}
+              type="button"
+              className="bg-red text-white font-primary font-bold text-sm px-2 h-8 hover:opacity-70"
+            >
+              + Create New
+            </button>
           </div>
           <div className="flex justify-center mt-5">
             <input
@@ -195,6 +206,7 @@ export default function CreateRecipe() {
           </div>
         </form>
       </div>
+      {isModal && <CategoryModal setIsModal={setIsModal} />}
     </div>
   );
 }

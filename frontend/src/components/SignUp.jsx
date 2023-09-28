@@ -36,6 +36,7 @@ export default function SignUp() {
 
   return (
     <form
+      autoComplete="off"
       className="w-80 flex flex-col justify-start"
       onSubmit={handleSubmit(onSubmit)}
     >

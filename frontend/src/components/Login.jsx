@@ -29,6 +29,7 @@ export default function Login() {
 
   return (
     <form
+      autoComplete="off"
       className="w-80 flex flex-col justify-start"
       onSubmit={handleSubmit(logIn)}
     >
