@@ -12,6 +12,20 @@ class RecipeManager extends AbstractManager {
     );
   }
 
+  insert({ title, fileName, notes, userId }) {
+    return this.database.query(
+      `INSERT INTO ${this.table} (title, file_name, notes, user_id) VALUES (?, ?, ?, ?)`,
+      [title, fileName, notes, userId]
+    );
+  }
+
+  insertCategory({ recipeId, categoryId }) {
+    return this.database.query(
+      `INSERT INTO receipe_has_category (recipe_id, category_id) VALUES (?, ?)`,
+      [recipeId, categoryId]
+    );
+  }
+
   //   insert(item) {
   //     return this.database.query(`insert into ${this.table} (title) values (?)`, [
   //       item.title,

@@ -37,7 +37,7 @@ export default function MyRecipes() {
       }
     };
     fetchData();
-  }, [selectedCategories]);
+  }, []);
 
   const toggleCategory = (categoryName) => {
     if (selectedCategories.includes(categoryName)) {
@@ -106,6 +106,13 @@ export default function MyRecipes() {
             ))}
         </ul>
       </div>
+      <button
+        onClick={() => navigate("/createnew")}
+        type="button"
+        className="font-primary w-fit px-3 font-bold h-8 text-sm bg-red hover:opacity-70 text-white mr-2 flex justify-center items-center"
+      >
+        Add a recipe
+      </button>
     </div>
   );
 }

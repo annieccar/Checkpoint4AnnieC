@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import LoginSignUp from "../pages/LoginSignUp";
 import MyRecipes from "../pages/MyRecipes";
 import Recipe from "../pages/Recipe";
+import CreateRecipe from "../pages/CreateRecipe";
 
 function Router() {
   return (
@@ -11,6 +12,7 @@ function Router() {
       <Route path="/signup" element={<LoginSignUp />} />
       <Route path="/myrecipes" element={<MyRecipes />} />
       <Route path="/recipe/:id" element={<Recipe />} />
+      <Route path="/createnew" element={<CreateRecipe />} />
     </Routes>
   );
 }
