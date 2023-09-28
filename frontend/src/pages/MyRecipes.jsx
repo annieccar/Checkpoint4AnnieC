@@ -13,7 +13,8 @@ export default function MyRecipes() {
 
   const [categories, setCategories] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  // const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const [combinedRecipes, setCombinedRecipes] = useState([]);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
@@ -28,10 +29,6 @@ export default function MyRecipes() {
         );
         setCategories(categoriesResponse.data);
         setRecipes(recipesResponse.data);
-        // const filteredRecipes = recipes.filter((recipe) => {
-        //   selectedCategories.length || selectedCategories.includes(recipe.name);
-        // });
-        // setFilteredRecipes(filteredRecipes);
       } catch (err) {
         console.error(err);
       }
@@ -48,6 +45,44 @@ export default function MyRecipes() {
       setSelectedCategories([...selectedCategories, categoryName]);
     }
   };
+
+  const combineRecipes = (array) => {
+    return array.reduce((combinedArray, current) => {
+      const existing = combinedArray.find(
+        (item) => item.title === current.title
+      );
+      if (existing) {
+        existing.name.push(current.name);
+      } else {
+        combinedArray.push({
+          id: current.id,
+          title: current.title,
+          name: [current.name],
+        });
+      }
+      return combinedArray;
+    }, []);
+  };
+
+  useEffect(() => {
+    if (recipes.length > 0) {
+      setCombinedRecipes(combineRecipes(recipes));
+    }
+  }, [recipes]);
+
+  useEffect(() => {
+    if (selectedCategories.length === 0) {
+      setFilteredRecipes(combinedRecipes);
+    } else {
+      setFilteredRecipes(
+        combinedRecipes.filter((recipe) => {
+          return selectedCategories.every((category) =>
+            recipe.name.includes(category)
+          );
+        })
+      );
+    }
+  }, [selectedCategories, combinedRecipes]);
 
   return (
     <div className="flex flex-col items-center mt-10 w-screen">
@@ -83,13 +118,12 @@ export default function MyRecipes() {
       </div>
       <div className="flex flex-col justify-start w-10/12 border-t-[1px] border-gray py-5 ">
         <ul className="flex flex-col justify-start ">
-          {recipes
+          {filteredRecipes
             .filter(
               (item) =>
                 !keyword.length ||
                 item.title.toLowerCase().includes(keyword.toLowerCase())
             )
-
             .map((item) => (
               <button
                 type="button"
