@@ -102,25 +102,34 @@ export default function MyRecipes() {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-5 my-5 mx-5 lg:flex lg:flex-col lg:w-3/4">
+          <div className="grid grid-cols-3 gap-5 my-5 mx-5 lg:grid-cols-2 lg:w-3/4">
             {categories.map((elem) => (
-              <button
-                type="button"
-                key={elem.name}
-                onClick={() => toggleCategory(elem.name)}
-                className={`font-primary font-bold h-10 text-sm ${
-                  selectedCategories.includes(elem.name)
-                    ? "bg-green text-white"
-                    : "border-solid border-[2px] border-green bg-white text-green"
-                } px-2`}
-              >
-                {elem.name}
-              </button>
+              <div key={elem.id} className="w-full lg:flex lg:justify-center">
+                <button
+                  type="button"
+                  key={elem.id}
+                  onClick={() => toggleCategory(elem.name)}
+                  className={`w-full font-primary font-bold h-10 text-sm lg:w-3/4 ${
+                    selectedCategories.includes(elem.name)
+                      ? "bg-green text-white"
+                      : "border-solid border-[2px] border-green bg-white text-green"
+                  } px-2`}
+                >
+                  {elem.name}
+                </button>
+              </div>
             ))}
           </div>
         </div>
-        <div className="flex flex-col items-center lg:w-3/5 lg:pl-10">
-          <div className="flex flex-col justify-start w-10/12 border-t-[1px] border-gray lg:border-none py-5 lg:pt-0 lg:min-h-[350px] lg:grid lg:grid-cols-2">
+        <div className="flex flex-col items-center lg:items-start lg:w-3/5 lg:pl-20">
+          <button
+            onClick={() => navigate("/createnew")}
+            type="button"
+            className="font-primary mb-5 mt-5 lg:mt-0 lg:mb-10 w-fit px-3 font-bold h-8 text-sm bg-red hover:opacity-70 text-white mr-2 flex justify-center items-center"
+          >
+            Add a recipe
+          </button>
+          <div className="flex flex-col justify-start w-10/12 border-t-[1px] border-gray lg:border-none py-5 lg:pt-0 lg:min-h-[350px]">
             <ul className="flex flex-col justify-start ">
               {filteredRecipes
                 .filter(
@@ -128,14 +137,16 @@ export default function MyRecipes() {
                     !keyword.length ||
                     item.title.toLowerCase().includes(keyword.toLowerCase())
                 )
+                .sort((a, b) => a.title.localeCompare(b.title))
                 .map((item) => (
                   <button
+                    key={item.id}
                     type="button"
                     className="w-fit"
                     onClick={() => navigate(`/recipe/${item.id}`)}
                   >
                     <li
-                      className="list-disc mx-5 my-1 font-primary text-dark text-lg  hover:border-b "
+                      className="list-disc mx-5 my-1 font-primary text-dark text-lg text-left hover:border-b "
                       key={item.title}
                     >
                       {item.title}
@@ -144,13 +155,6 @@ export default function MyRecipes() {
                 ))}
             </ul>
           </div>
-          <button
-            onClick={() => navigate("/createnew")}
-            type="button"
-            className="font-primary w-fit px-3 font-bold h-8 text-sm bg-red hover:opacity-70 text-white mr-2 flex justify-center items-center"
-          >
-            Add a recipe
-          </button>
         </div>
       </div>
     </div>

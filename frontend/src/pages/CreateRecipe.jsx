@@ -12,6 +12,7 @@ export default function CreateRecipe() {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isModal, setIsModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
   const navigate = useNavigate();
   const { VITE_BACKEND_URL } = import.meta.env;
   const {
@@ -77,8 +78,18 @@ export default function CreateRecipe() {
         console.error(err);
       }
     };
-    uploadRecipe();
+
+    if (selectedCategories.length > 0) {
+      setErrorMessage(null);
+      uploadRecipe();
+    } else {
+      setErrorMessage(true);
+    }
   };
+
+  useEffect(() => {
+    if (selectedCategories.length > 0) setErrorMessage(false);
+  }, [selectedCategories]);
 
   return (
     <div className="mt-5 lg:px-10">
@@ -189,6 +200,7 @@ export default function CreateRecipe() {
                 ))}
               </div>
             </div>
+
             <button
               onClick={() => setIsModal(true)}
               type="button"
@@ -197,6 +209,11 @@ export default function CreateRecipe() {
               + Create New
             </button>
           </div>
+          {errorMessage && (
+            <span className="text-red pl-5 mt-5">
+              You must select at least one category
+            </span>
+          )}
           <div className="flex justify-center mt-5">
             <input
               className="font-primary w-fit px-3 font-bold h-8 text-sm bg-green hover:opacity-70 text-white mr-2 flex justify-center items-center"

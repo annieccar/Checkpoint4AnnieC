@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center">
       <div className="font-primary text-center text-3xl text-red font-bold px-5 my-10">
-        A simple and quick way to organize your recipes and
+        A simple tool to have all your recipes in one place and
       </div>
       <h1 className="font-script text-gray text-5xl mb-10">
         make your life easier...
